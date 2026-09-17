@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const phone = params.get('num');
+    if (phone) {
+      window.location.href = 'zoomphonecall://' + phone;
+      setTimeout(() => { window.close(); }, 400);
+    }
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 30px;">
+  <p>Connecting to Zoom Phone...</p>
+</body>
+</html>

@@ -3,30 +3,33 @@
 <head>
   <meta charset="utf-8">
   <title>Zoom Dialer</title>
-  <script>
-    window.onload = function() {
-      const params = new URLSearchParams(window.location.search);
-      let phone = params.get('num');
-      
-      if (phone) {
-        if (phone.length === 10) { phone = '1' + phone; }
-        const zoomUrl = 'zoomphonecall://' + phone;
-        
-        document.getElementById('manual-link').href = zoomUrl;
-        window.location.href = zoomUrl;
-
-        // 6 second timer gives enough time to check "Always allow"
-        setTimeout(() => {
-          window.close();
-        }, 6000);
-      }
-    };
-  </script>
 </head>
-<body style="font-family: sans-serif; text-align: center; padding-top: 40px;">
-  <h2>Launching Zoom Phone...</h2>
-  <p style="color: #555;">Check <b>"Always allow jaimebedolla-afk.github.io..."</b> on the prompt above.</p>
-  <br>
-  <a id="manual-link" href="#" style="background: #0066CC; color: white; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-weight: bold;">Click here if Zoom didn't open</a>
+<body style="font-family: sans-serif; text-align: center; padding-top: 40px; background-color: #fafafa;">
+  <h3 style="color: #222;">Launching Zoom Phone...</h3>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      let rawNum = params.get('num') || '';
+      let cleanNum = rawNum.replace(/\D/g, '');
+
+      if (cleanNum.length === 10) {
+        cleanNum = '1' + cleanNum;
+      }
+
+      if (cleanNum) {
+        // Trigger via script-generated link to bypass browser navigation drops
+        const link = document.createElement('a');
+        link.href = 'zoomphonecall://' + cleanNum;
+        document.body.appendChild(link);
+        link.click();
+
+        // Fast 700ms handoff window before closing tab
+        setTimeout(function() {
+          window.close();
+        }, 700);
+      }
+    })();
+  </script>
 </body>
 </html>

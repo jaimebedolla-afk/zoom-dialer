@@ -9,26 +9,24 @@
       let phone = params.get('num');
       
       if (phone) {
-        // Ensure 11 digits for North America
-        if (phone.length === 10) { 
-          phone = '1' + phone; 
-        }
+        if (phone.length === 10) { phone = '1' + phone; }
+        const zoomUrl = 'zoomphonecall://' + phone;
         
-        // Launch native Zoom protocol inside a hidden iframe
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = 'zoomphonecall://' + phone;
-        document.body.appendChild(iframe);
+        document.getElementById('manual-link').href = zoomUrl;
+        window.location.href = zoomUrl;
 
-        // Close the tab smoothly after handoff
+        // 6 second timer gives enough time to check "Always allow"
         setTimeout(() => {
           window.close();
-        }, 1200);
+        }, 6000);
       }
     };
   </script>
 </head>
-<body style="font-family: sans-serif; text-align: center; padding-top: 50px;">
+<body style="font-family: sans-serif; text-align: center; padding-top: 40px;">
   <h2>Launching Zoom Phone...</h2>
+  <p style="color: #555;">Check <b>"Always allow jaimebedolla-afk.github.io..."</b> on the prompt above.</p>
+  <br>
+  <a id="manual-link" href="#" style="background: #0066CC; color: white; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-weight: bold;">Click here if Zoom didn't open</a>
 </body>
 </html>

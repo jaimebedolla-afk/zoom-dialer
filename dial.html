@@ -6,28 +6,29 @@
   <script>
     window.onload = function() {
       const params = new URLSearchParams(window.location.search);
-      const phone = params.get('num');
+      let phone = params.get('num');
+      
       if (phone) {
-        // Trigger call via system TEL handler
-        window.location.href = 'tel:' + phone;
+        // Ensure 11 digits for North America
+        if (phone.length === 10) { 
+          phone = '1' + phone; 
+        }
         
-        // Wait 2.5 seconds to allow Windows/Zoom handoff before closing tab
+        // Launch native Zoom protocol inside a hidden iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = 'zoomphonecall://' + phone;
+        document.body.appendChild(iframe);
+
+        // Close the tab smoothly after handoff
         setTimeout(() => {
           window.close();
-        }, 2500);
+        }, 1200);
       }
     };
   </script>
 </head>
 <body style="font-family: sans-serif; text-align: center; padding-top: 50px;">
-  <h2>Connecting to Zoom Phone...</h2>
-  <p>If Zoom does not open automatically, <a id="manual-link" href="#">click here to dial</a>.</p>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const phone = params.get('num');
-    if (phone) {
-      document.getElementById('manual-link').href = 'tel:' + phone;
-    }
-  </script>
+  <h2>Launching Zoom Phone...</h2>
 </body>
 </html>
